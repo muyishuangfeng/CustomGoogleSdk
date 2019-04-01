@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CustomSdk</string>
+    <!--
+    <string name="facebook_test_app_id">347759105952557</string>
+    <string name="fb_login_test_protocol_scheme">ff5ee3b4135241962b10eecb4eeab15f</string>
+    -->
+    <string name="facebook_test_app_id">347759105952557</string>
+    <string name="fb_login_test_protocol_scheme">ff5ee3b4135241962b10eecb4eeab15f</string>
+</resources>
