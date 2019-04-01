@@ -78,7 +78,11 @@ public class GooglePlayManagers {
                 }
             }
         });
+
+
     }
+
+
 
     /**
      * 查询是否有未消费的商品
@@ -192,28 +196,24 @@ public class GooglePlayManagers {
      * 释放资源
      */
     public static void release() {
-        /**
-         * 释放掉资源
-         */
         if (mHelper != null) {
-            try {
-                mHelper.dispose();
-            } catch (IabHelper.IabAsyncInProgressException e) {
-                e.printStackTrace();
-            }
+            mHelper.disposeWhenFinished();
         }
         mHelper = null;
     }
 
 
-    public static void onActivityResult(int requestCode, Intent data, int selfRequestCode,
+    public static void onActivityResult(Context context,int requestCode,int resultCode, Intent data, int selfRequestCode,
                                         final String LTAppID, final String LTAppKey,
+                                        final List<String>goodsList,
+                                        final String productID,
                                         OnGoogleResultListener
                                                 mListener) {
         /**
          * 将回调交给帮助类来处理, 否则会出现支付正在进行的错误
          */
         if (mHelper == null) return;
+        mHelper.handleActivityResult(requestCode,resultCode,data);
         if (requestCode == selfRequestCode) {
             int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
             //订单信息
@@ -225,7 +225,7 @@ public class GooglePlayManagers {
                 Map<String, Object> params = new WeakHashMap<>();
                 params.put("purchase_token", googleModel.getPurchaseToken());
                 params.put("lt_order_id", payload);
-                uploadToServer(LTAppID, LTAppKey, params, mListener);
+                uploadToServer(context,LTAppID, LTAppKey, params,goodsList,productID, mListener);
             }
         }
 
@@ -268,10 +268,12 @@ public class GooglePlayManagers {
                 });
     }
 
-    private static void uploadToServer(
+    private static void uploadToServer(final Context context,
                                        final String LTAppID,
                                        final String LTAppKey,
                                        Map<String, Object> params,
+                                       final List<String>goodsList,
+                                       final String productID,
                                        final OnGoogleResultListener mListener) {
         LoginBackManager.googlePlay(
                 LTAppID, LTAppKey, params
@@ -279,7 +281,26 @@ public class GooglePlayManagers {
                     @Override
                     public void onPlaySuccess(String result) {
                         mListener.onResultSuccess(result);
+                        try {
+                            mHelper.queryInventoryAsync(true, goodsList, goodsList,
+                                    new IabHelper.QueryInventoryFinishedListener() {
+                                        @Override
+                                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                                            if (result != null) {
+                                                if (result.isSuccess() && inv.hasPurchase(productID)) {
+                                                    //消费, 并下一步, 这里Demo里面我没做提示,将购买了,但是没消费掉的商品直接消费掉, 正常应该
+                                                    //给用户一个提示,存在未完成的支付订单,是否完成支付
+                                                    consumeProduct(context, inv.getPurchase(productID),
+                                                            false, "Consumption success",
+                                                            "Consumption failed");
+                                                }
+                                            }
+                                        }
 
+                                    });
+                        } catch (IabHelper.IabAsyncInProgressException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'gujian'
             keyPassword '123456'
-            storeFile file('F:/Program/sort/keystore')
+            storeFile file('G:/sign/keystore')
             storePassword '123456'
         }
     }

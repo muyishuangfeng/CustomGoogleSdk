@@ -40,7 +40,7 @@ public class GooglePlayActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
+        initGoogle();
         mTxtResult = findViewById(R.id.txt_result);
         mBtnSend = findViewById(R.id.btn_send);
         mBtnSend.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +104,6 @@ public class GooglePlayActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void buy() {
-        initGoogle();
-
         Map<String, Object> map = new HashMap<>();
         map.put("googleOrder", 123456789);
         List<String> oldSkus = new ArrayList<>();
@@ -182,7 +180,7 @@ public class GooglePlayActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(final int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        GooglePlayManager.getInstance().onActivityResult(this, requestCode, resultCode, data, selfRequestCode, LTAppID,
 //                LTAppKey, new OnGoogleResultListener() {
@@ -206,12 +204,31 @@ public class GooglePlayActivity extends AppCompatActivity {
 //
 //                    }
 //                });
-
-        GooglePlayManagers.onActivityResult(requestCode, data, selfRequestCode, LTAppID, LTAppKey, new OnGoogleResultListener() {
+        List<String> oldSkus = new ArrayList<>();
+        oldSkus.add("com.ltgamesyyjw.2750d");
+        oldSkus.add("com.ltgamesyyjw.5500d");
+        oldSkus.add("com.ltgamesyyjw.16500d");
+        oldSkus.add("com.ltgamesyyjw.27500d");
+        oldSkus.add("com.ltgamesyyjw.109000d");
+        oldSkus.add("com.ltgamesyyjw.121000d");
+        oldSkus.add("com.ltgamesyyjw.ptyk");
+        oldSkus.add("com.ltgamesyyjw.gjyk");
+        oldSkus.add("com.ltgamesyyjw.qhlb1");
+        oldSkus.add("com.ltgamesyyjw.qhlb2");
+        oldSkus.add("com.ltgamesyyjw.qhlb3");
+        oldSkus.add("com.ltgamesyyjw.lslb1");
+        oldSkus.add("com.ltgamesyyjw.lslb2");
+        oldSkus.add("com.ltgamesyyjw.lslb3");
+        oldSkus.add("com.ltgamesyyjw.lslb4");
+        oldSkus.add("com.ltgamesyyjw.lslb5");
+        oldSkus.add("com.ltgamesyyjw.lslb6");
+        oldSkus.add(" com.ltgamesyyjw.czjj");
+        GooglePlayManagers.onActivityResult(this,requestCode,resultCode, data, selfRequestCode, LTAppID, LTAppKey, oldSkus,productID,new OnGoogleResultListener() {
             @Override
             public void onResultSuccess(String result) {
                 Log.e("Google", "======onActivityResult==onResultSuccess=" + result);
-                GooglePlayManagers.release();
+                //GooglePlayManagers.release();
+                mTxtResult.setText(result);
             }
 
             @Override
@@ -222,7 +239,7 @@ public class GooglePlayActivity extends AppCompatActivity {
             @Override
             public void onResultFailed(String failedMsg) {
                 Log.e("Google", "======onActivityResult==onResultFailed=" + failedMsg);
-                GooglePlayManagers.release();
+                //GooglePlayManagers.release();
             }
         });
     }
