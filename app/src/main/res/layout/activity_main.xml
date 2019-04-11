@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
+        android:visibility="gone"
         android:text="Google login" />
 
     <Button
@@ -24,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
+        android:visibility="gone"
         android:text="Facebook" />
 
     <Button
@@ -31,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
+        android:visibility="gone"
         android:text="UI" />
 
 </LinearLayout>

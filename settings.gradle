@@ -1,1 +1,1 @@
-include ':app',':LTGameSdkGooglePlay'
+include ':app'
