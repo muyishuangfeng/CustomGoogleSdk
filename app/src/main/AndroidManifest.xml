@@ -25,7 +25,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".GooglePlaysActivity"/>
-        <activity android:name=".OneStoreActivity"/>
+        <activity android:name=".OneStoreActivity"
+            android:screenOrientation="landscape"/>
+
+        <meta-data
+            android:name="iap:api_version"
+            android:value="5" />
+
+        <meta-data
+            android:name="iap:view_option"
+            android:value="popup" />
+
+
     </application>
 
 </manifest>
